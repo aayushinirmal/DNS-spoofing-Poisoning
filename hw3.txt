@@ -1,0 +1,30 @@
+CSE-508 Network Security
+
+Aayushi Nirmal- 113504530
+
+Part 1 dnspoison
+
+1. The code reads the handle (either from file or live stream) and waits for the DNS query packet on port 53. 
+2. We create a spoofed packet from the DNS query packet by swapping the source and destination ids at every level of the protocol (swapping IP addresses of source and destination at the IP layer, etc.)
+3. We read the question from the DNS query packet and match it with the entry in the file (if provided) otherwise all the DNS queries are poisoned. This is only done
+at IPv4. 
+
+For the implementation we are running a python server on attackers ip and replace the site with index.html that we have created
+
+
+Part 2 dnsdetect
+
+1. To detect DNS poisoning we track the DNS queries in Go Map by using a structure (Go struct) that maintains TXID, total_count (for the case where 2 legit DNS Query have same TXID) and timestamp of the latest query. We also keep track of all DNS responses in Go Map with the same TXID. If the number of responses for a particular
+TXID exceeds the number of requests, we Flag it. Then all the answers for flagged TXID are displayed.
+=>Output on generated using my dnsdetect:
+
+go run dnsdetect.go -r dnsattack.pcap                         
+dnsdetect reading from file dnsattack.pcap
+2021-04-05 16:56:08.45846 DNS poisoning attempt
+TXID 57886 Request www.bankofamerica.com
+Answer1 [192.168.12.128]
+Answer2 [171.159.116.100]
+2021-04-05 16:56:29.452946 DNS poisoning attempt
+TXID 65456 Request www.cs.stonybrook.edu
+Answer1 [192.168.12.128]
+Answer2 [23.185.0.2]

